@@ -1,0 +1,18 @@
+services:
+  unifi-dashboard:
+    build:
+      context: .
+      args:
+        - VITE_BASE_PATH=${VITE_BASE_PATH:-/}
+    container_name: unifi-dashboard
+    restart: unless-stopped
+    ports:
+      - "4880:3000"
+    environment:
+      - INFLUX_URL=${INFLUX_URL:-http://host.docker.internal:8086}
+      - INFLUX_DB=${INFLUX_DB:-unpoller}
+      - INFLUX_USER=${INFLUX_USER:-unpoller}
+      - INFLUX_PASS=${INFLUX_PASS}
+      - SITE_NAME=${SITE_NAME:-UniFi Network}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

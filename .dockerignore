@@ -1,0 +1,36 @@
+# Dependencies
+node_modules
+server/node_modules
+collector/node_modules
+
+# Build output
+dist
+
+# Git
+.git
+.gitignore
+
+# Environment and config
+.env*
+.dev-*
+
+# Documentation
+*.md
+docs/
+
+# Development
+scripts/
+screenshots/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore

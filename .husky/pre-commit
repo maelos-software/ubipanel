@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Run lint-staged for formatting staged files
+npx lint-staged
+
+# Run TypeScript type checking
+echo "Running TypeScript check..."
+npx tsc --noEmit || exit 1
+
+# Run all tests
+echo "Running tests..."
+npm test || exit 1
+
+echo "Pre-commit checks passed!"

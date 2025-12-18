@@ -1,0 +1,19 @@
+# Production deployment - pulls pre-built image from GitHub Container Registry
+# Copy this file and .env.example to your server, configure .env, then run:
+#   docker compose pull && docker compose up -d
+
+services:
+  ubipanel:
+    image: ghcr.io/maelos-software/ubipanel:main
+    container_name: ubipanel
+    restart: unless-stopped
+    ports:
+      - "4880:3000"
+    environment:
+      - INFLUX_URL=${INFLUX_URL}
+      - INFLUX_DB=${INFLUX_DB:-unpoller}
+      - INFLUX_USER=${INFLUX_USER:-unpoller}
+      - INFLUX_PASS=${INFLUX_PASS}
+      - SITE_NAME=${SITE_NAME:-UniFi Network}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

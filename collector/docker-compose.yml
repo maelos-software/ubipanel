@@ -1,0 +1,18 @@
+services:
+  unifi-collector:
+    build: .
+    container_name: unifi-collector
+    restart: unless-stopped
+    environment:
+      - UNIFI_URL=${UNIFI_URL:-https://192.168.8.1}
+      - UNIFI_USER=${UNIFI_USER:-unpoller}
+      - UNIFI_PASS=${UNIFI_PASS}
+      - UNIFI_SITE=${UNIFI_SITE:-default}
+      - INFLUX_URL=${INFLUX_URL:-http://host.docker.internal:8086}
+      - INFLUX_DB=${INFLUX_DB:-unpoller}
+      - INFLUX_USER=${INFLUX_USER}
+      - INFLUX_PASS=${INFLUX_PASS}
+      - COLLECTION_INTERVAL=${COLLECTION_INTERVAL:-300000}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
