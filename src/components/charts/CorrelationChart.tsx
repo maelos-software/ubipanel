@@ -23,6 +23,7 @@ interface CorrelationChartProps {
     isWired: boolean;
     apName: string;
     signal: number;
+    rssi: number;
     satisfaction: number;
   }[];
 }
@@ -32,11 +33,11 @@ export function CorrelationChart({ clients }: CorrelationChartProps) {
 
   const data = useMemo(() => {
     return clients
-      .filter((c) => !c.isWired && c.signal && c.satisfaction)
+      .filter((c) => !c.isWired && c.rssi && c.satisfaction)
       .map((c) => ({
         name: c.name || c.hostname || c.mac,
         mac: c.mac,
-        x: c.signal, // RSSI in dBm (e.g., -60)
+        x: c.rssi, // RSSI in dBm (e.g., -60)
         y: c.satisfaction, // 0-100
         apName: c.apName,
       }));
