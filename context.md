@@ -178,16 +178,38 @@ Dark mode uses darker sidebar gradient:
 }
 ```
 
-### UnPoller Field Mapping Quirks
+### Data Normalization & Field Mapping
 
-- UnPoller `signal` = RSSI in dBm (e.g., -65)
-- UnPoller `rssi` = Signal quality percentage (0-100)
-- These are backwards from standard naming - dashboard normalizes internally
+#### UnPoller Field Mapping Quirks
 
-### TX/RX vs Download/Upload
+UnPoller field names are often the inverse of standard network terminology. The dashboard normalizes these internally in parsing hooks:
 
-- WAN/Client context: Download/Upload (user perspective)
-- Switch ports: TX/RX (device perspective)
+- **`signal`** field in InfluxDB = **RSSI in dBm** (e.g., -65).
+- **`rssi`** field in InfluxDB = **Signal Quality Percentage** (0-100).
+  _Always verify which property a component expects (`rssi` vs `signal`)._
+
+#### TX/RX vs Download/Upload
+
+Terminology shifts based on perspective:
+
+- **User Perspective (WAN/Client)**: Download (RX) / Upload (TX).
+- **Device Perspective (Switch Ports)**: TX (Transmit out of port) / RX (Receive into port).
+
+#### Applications Page Data Model
+
+The Applications page uses a **"Store & Sum"** model:
+
+- The `collector` polls the UniFi v2 API for traffic stats over a window (default 5m) and writes the results raw to InfluxDB.
+- The frontend calculates totals by **summing** all points in the selected range.
+- **Limitation**: This assumes the API returns **deltas** (usage during that window). If the API returns **cumulative counters** (lifetime usage), the dashboard will massively over-report data unless queries are switched to `SPREAD()` (MAX - MIN).
+
+### Recharts & Theming
+
+Recharts uses inline SVG styles that do not support CSS variables.
+
+- Use the **`useChartColors`** hook to get theme-aware hex colors.
+- Common chart elements (Axis, Grid, Tooltips) should always use colors from this hook to ensure dark mode support.
+- Tooltips should use `chartColors.tooltipBg`, `chartColors.tooltipBorder`, and `chartColors.tooltipText`.
 
 ### Query Security (server/lib/validateQuery.js)
 
@@ -219,18 +241,6 @@ npm run typecheck    # TypeScript check
 npm run lint         # ESLint
 npm run validate     # All checks (typecheck + lint + test)
 npm run build        # Production build
-```
-
-### Default Ports
-
-- 4820 - Vite dev server (frontend)
-- 4821 - Proxy server (API)
-
-Configurable via `.env.development`:
-
-```env
-DEV_VITE_PORT=4820
-DEV_PROXY_PORT=4821
 ```
 
 ### Scripts

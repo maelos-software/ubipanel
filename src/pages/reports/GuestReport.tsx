@@ -7,6 +7,7 @@ import { queryInflux } from "@/lib/influx";
 import { REFETCH_INTERVAL } from "@/lib/config";
 import { formatBytes, formatBytesRate, formatUptime } from "@/lib/format";
 import { useGuestBandwidthTrend } from "@/hooks/useBandwidth";
+import { useChartColors } from "@/hooks/useChartColors";
 import {
   LineChart,
   Line,
@@ -21,6 +22,7 @@ import {
 export function GuestReport() {
   const navigate = useNavigate();
   const [timeRange, setTimeRange] = useState("24h");
+  const chartColors = useChartColors();
 
   // Current guest clients
   const { data: guests = [], isLoading } = useQuery({
@@ -125,7 +127,7 @@ export function GuestReport() {
             onClick={() => setTimeRange(range)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               timeRange === range
-                ? "bg-pink-100 text-pink-700"
+                ? "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300"
                 : "bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)]"
             }`}
           >
@@ -191,21 +193,29 @@ export function GuestReport() {
                         ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                         : d.toLocaleDateString([], { month: "short", day: "numeric" });
                     }}
-                    tick={{ fontSize: 11, fill: "#9ca3af" }}
+                    tick={{ fontSize: 11, fill: chartColors.tickText }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fontSize: 11, fill: "#9ca3af" }}
+                    tick={{ fontSize: 11, fill: chartColors.tickText }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <Tooltip
+                    cursor={{ stroke: chartColors.axisLine, strokeWidth: 1 }}
                     content={({ active, payload, label }) => {
                       if (!active || !payload?.length) return null;
                       return (
-                        <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                          <div className="text-gray-400">
+                        <div
+                          className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                          style={{
+                            backgroundColor: chartColors.tooltipBg,
+                            border: `1px solid ${chartColors.tooltipBorder}`,
+                            color: chartColors.tooltipText,
+                          }}
+                        >
+                          <div style={{ color: chartColors.tooltipTextMuted }} className="mb-1">
                             {label ? new Date(label).toLocaleString() : ""}
                           </div>
                           <div className="font-medium">{payload[0]?.value} guests</div>
@@ -252,23 +262,31 @@ export function GuestReport() {
                         ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                         : d.toLocaleDateString([], { month: "short", day: "numeric" });
                     }}
-                    tick={{ fontSize: 11, fill: "#9ca3af" }}
+                    tick={{ fontSize: 11, fill: chartColors.tickText }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
                     tickFormatter={(v) => formatBytesRate(v)}
-                    tick={{ fontSize: 11, fill: "#9ca3af" }}
+                    tick={{ fontSize: 11, fill: chartColors.tickText }}
                     axisLine={false}
                     tickLine={false}
                     width={70}
                   />
                   <Tooltip
+                    cursor={{ stroke: chartColors.axisLine, strokeWidth: 1 }}
                     content={({ active, payload, label }) => {
                       if (!active || !payload?.length) return null;
                       return (
-                        <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                          <div className="text-gray-400">
+                        <div
+                          className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                          style={{
+                            backgroundColor: chartColors.tooltipBg,
+                            border: `1px solid ${chartColors.tooltipBorder}`,
+                            color: chartColors.tooltipText,
+                          }}
+                        >
+                          <div style={{ color: chartColors.tooltipTextMuted }} className="mb-1">
                             {label ? new Date(label).toLocaleString() : ""}
                           </div>
                           <div>Upload: {formatBytesRate(payload[0]?.value as number)}</div>

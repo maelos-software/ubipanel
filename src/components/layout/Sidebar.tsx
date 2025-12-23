@@ -112,7 +112,7 @@ export function Sidebar() {
         {!isMobile && (
           <button
             onClick={toggleSidebar}
-            className="absolute -right-3 top-20 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors focus-visible:ring-2 focus-visible:ring-purple-500 outline-none"
+            className="absolute -right-3 top-20 w-6 h-6 bg-white dark:bg-slate-800 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 transition-colors focus-visible:ring-2 focus-visible:ring-purple-500 outline-none"
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? (

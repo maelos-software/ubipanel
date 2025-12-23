@@ -532,7 +532,7 @@ export function AccessPointDetail() {
                         {s.channels["2.4GHz"].map((ch) => (
                           <span
                             key={ch}
-                            className="inline-block px-1.5 py-0.5 bg-amber-500/10 dark:bg-amber-500/20 text-amber-700 rounded text-xs"
+                            className="inline-block px-1.5 py-0.5 bg-amber-500/10 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded text-xs"
                           >
                             {ch}
                           </span>
@@ -545,7 +545,7 @@ export function AccessPointDetail() {
                         {s.channels["5GHz"].map((ch) => (
                           <span
                             key={ch}
-                            className="inline-block px-1.5 py-0.5 bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 rounded text-xs"
+                            className="inline-block px-1.5 py-0.5 bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 rounded text-xs"
                           >
                             {ch}
                           </span>
@@ -558,7 +558,7 @@ export function AccessPointDetail() {
                         {s.channels["6GHz"].map((ch) => (
                           <span
                             key={ch}
-                            className="inline-block px-1.5 py-0.5 bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-700 rounded text-xs"
+                            className="inline-block px-1.5 py-0.5 bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-400 rounded text-xs"
                           >
                             {ch}
                           </span>

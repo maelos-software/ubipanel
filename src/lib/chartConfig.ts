@@ -22,6 +22,9 @@ export function getTooltipStyle(chartColors: ChartColors) {
       borderRadius: "8px",
       boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
     },
+    itemStyle: {
+      color: chartColors.tooltipText,
+    },
     labelStyle: {
       color: chartColors.tooltipText,
     },
@@ -39,9 +42,9 @@ export const CHANNEL_COLORS = CHART_COLORS.channels;
  */
 export const PORT_COLORS = {
   down: "bg-[var(--bg-tertiary)]",
-  error: "bg-red-400",
-  bandwidthHigh: "bg-purple-500", // > 100MB/s
-  bandwidthMedium: "bg-emerald-500", // > 10MB/s
-  bandwidthNormal: "bg-emerald-400", // > 1MB/s
-  bandwidthLow: "bg-emerald-300",
+  error: "bg-red-500",
+  bandwidthHigh: "bg-purple-600 dark:bg-purple-500", // > 100MB/s
+  bandwidthMedium: "bg-emerald-600 dark:bg-emerald-500", // > 10MB/s
+  bandwidthNormal: "bg-emerald-500 dark:bg-emerald-600", // > 1MB/s
+  bandwidthLow: "bg-emerald-400 dark:bg-emerald-700",
 };

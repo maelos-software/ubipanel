@@ -97,7 +97,7 @@ export function useTotalTrafficByApp(range: string = "24h") {
 
   return useInfluxGroupByQuery<TrafficTotalByApp>(
     ["traffic_total_by_app", range],
-    `SELECT SUM(bytes_rx) as bytes_rx, SUM(bytes_tx) as bytes_tx, SUM(bytes_total) as bytes_total, MAX(client_count) as client_count FROM traffic_total_by_app WHERE ${timeFilter} GROUP BY application, category, application_name, category_name`,
+    `SELECT SPREAD(bytes_rx) as bytes_rx, SPREAD(bytes_tx) as bytes_tx, SPREAD(bytes_total) as bytes_total, MAX(client_count) as client_count FROM traffic_total_by_app WHERE ${timeFilter} GROUP BY application, category, application_name, category_name`,
     (columns: string[], values: unknown[], tags?: Record<string, string>) => {
       const getCol = (name: string) => columns.indexOf(name);
       return {
@@ -196,7 +196,7 @@ export function useApplicationTrafficHistory(appId: number, range: string = "24h
 
   return useInfluxQuery<TrafficHistoryPoint>(
     ["traffic_by_app", "history", String(appId), range],
-    `SELECT SUM(bytes_rx) as bytes_rx, SUM(bytes_tx) as bytes_tx, SUM(bytes_total) as bytes_total FROM traffic_by_app WHERE application = '${String(appId)}' AND ${timeFilter} GROUP BY time(${groupBy}) ORDER BY time ASC`,
+    `SELECT SPREAD(bytes_rx) as bytes_rx, SPREAD(bytes_tx) as bytes_tx, SPREAD(bytes_total) as bytes_total FROM traffic_by_app WHERE application = '${String(appId)}' AND ${timeFilter} GROUP BY time(${groupBy}) ORDER BY time ASC`,
     (columns, values) => {
       const getCol = (name: string) => columns.indexOf(name);
       return {

@@ -9,6 +9,7 @@ import { getApplicationName, getCategoryName } from "@/lib/dpiMappings";
 import { TIME_RANGES_LONG } from "@/lib/timeRanges";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Globe, Server, Laptop, AlertTriangle } from "lucide-react";
+import { useChartColors } from "@/hooks/useChartColors";
 
 interface AppAggregated {
   application: number;
@@ -30,6 +31,7 @@ interface CategoryAggregated {
 export function Applications() {
   const navigate = useNavigate();
   const [timeRange, setTimeRange] = useState(TIME_RANGES_LONG[1]); // Default to 24h
+  const chartColors = useChartColors();
 
   // Use pre-aggregated data for efficiency (no client-side aggregation needed)
   const {
@@ -178,8 +180,8 @@ export function Applications() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-100">
-              <Server className="w-5 h-5 text-purple-600" />
+            <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-900/30">
+              <Server className="w-5 h-5 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">{topApps.length}</div>
@@ -189,8 +191,8 @@ export function Applications() {
         </div>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-100">
-              <Globe className="w-5 h-5 text-blue-600" />
+            <div className="p-2 rounded-lg bg-blue-500/10 dark:bg-blue-900/30">
+              <Globe className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -202,8 +204,8 @@ export function Applications() {
         </div>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-100">
-              <Laptop className="w-5 h-5 text-green-600" />
+            <div className="p-2 rounded-lg bg-green-500/10 dark:bg-green-900/30">
+              <Laptop className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -215,8 +217,8 @@ export function Applications() {
         </div>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-100">
-              <Server className="w-5 h-5 text-amber-600" />
+            <div className="p-2 rounded-lg bg-amber-500/10 dark:bg-amber-900/30">
+              <Server className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -241,20 +243,25 @@ export function Applications() {
                 <XAxis
                   type="number"
                   tickFormatter={(v) => formatBytes(v)}
-                  tick={{ fill: "#6b7280", fontSize: 11 }}
+                  tick={{ fill: chartColors.tickText, fontSize: 11 }}
+                  stroke={chartColors.axisLine}
                 />
                 <YAxis
                   type="category"
                   dataKey="categoryName"
                   width={120}
-                  tick={{ fill: "#374151", fontSize: 11 }}
+                  tick={{ fill: chartColors.tickText, fontSize: 11 }}
+                  stroke={chartColors.axisLine}
                 />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
+                    backgroundColor: chartColors.tooltipBg,
+                    border: `1px solid ${chartColors.tooltipBorder}`,
                     borderRadius: "8px",
                   }}
+                  itemStyle={{ color: chartColors.tooltipText }}
+                  labelStyle={{ color: chartColors.tooltipText }}
                   formatter={(value: number) => formatBytes(value)}
                 />
                 <Bar dataKey="bytesTotal" radius={[0, 4, 4, 0]}>
@@ -278,20 +285,25 @@ export function Applications() {
                 <XAxis
                   type="number"
                   tickFormatter={(v) => formatBytes(v)}
-                  tick={{ fill: "#6b7280", fontSize: 11 }}
+                  tick={{ fill: chartColors.tickText, fontSize: 11 }}
+                  stroke={chartColors.axisLine}
                 />
                 <YAxis
                   type="category"
                   dataKey="country"
                   width={40}
-                  tick={{ fill: "#374151", fontSize: 11 }}
+                  tick={{ fill: chartColors.tickText, fontSize: 11 }}
+                  stroke={chartColors.axisLine}
                 />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
+                    backgroundColor: chartColors.tooltipBg,
+                    border: `1px solid ${chartColors.tooltipBorder}`,
                     borderRadius: "8px",
                   }}
+                  itemStyle={{ color: chartColors.tooltipText }}
+                  labelStyle={{ color: chartColors.tooltipText }}
                   formatter={(value: number) => formatBytes(value)}
                 />
                 <Bar dataKey="bytesTotal" fill="#3b82f6" radius={[0, 4, 4, 0]} />

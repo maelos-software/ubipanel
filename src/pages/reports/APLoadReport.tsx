@@ -5,10 +5,12 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Badge } from "@/components/common/Badge";
 import { queryInflux } from "@/lib/influx";
 import { REFETCH_INTERVAL } from "@/lib/config";
+import { useChartColors } from "@/hooks/useChartColors";
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 
 export function APLoadReport() {
   const navigate = useNavigate();
+  const chartColors = useChartColors();
 
   // AP Load data
   const { data: aps = [], isLoading } = useQuery({
@@ -188,17 +190,29 @@ export function APLoadReport() {
                 tickFormatter={(t) =>
                   new Date(t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                 }
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
               />
-              <YAxis tick={{ fontSize: 12, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+              <YAxis
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
+                axisLine={false}
+                tickLine={false}
+              />
               <Tooltip
+                cursor={{ stroke: chartColors.axisLine, strokeWidth: 1 }}
                 content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null;
                   return (
-                    <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                      <div className="text-gray-400 mb-2">
+                    <div
+                      className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                      style={{
+                        backgroundColor: chartColors.tooltipBg,
+                        border: `1px solid ${chartColors.tooltipBorder}`,
+                        color: chartColors.tooltipText,
+                      }}
+                    >
+                      <div style={{ color: chartColors.tooltipTextMuted }} className="mb-2">
                         {label ? new Date(label).toLocaleString() : ""}
                       </div>
                       {payload.map((entry, idx) => (
@@ -207,7 +221,7 @@ export function APLoadReport() {
                             className="w-2 h-2 rounded-full"
                             style={{ backgroundColor: entry.color }}
                           />
-                          <span className="text-gray-300">{entry.name}:</span>
+                          <span style={{ color: chartColors.tooltipTextMuted }}>{entry.name}:</span>
                           <span className="font-medium">{entry.value}</span>
                         </div>
                       ))}
@@ -271,23 +285,31 @@ export function APLoadReport() {
                 tickFormatter={(t) =>
                   new Date(t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                 }
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 domain={[0, 100]}
                 tickFormatter={(v) => `${v}%`}
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
               />
               <Tooltip
+                cursor={{ stroke: chartColors.axisLine, strokeWidth: 1 }}
                 content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null;
                   return (
-                    <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                      <div className="text-gray-400 mb-2">
+                    <div
+                      className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                      style={{
+                        backgroundColor: chartColors.tooltipBg,
+                        border: `1px solid ${chartColors.tooltipBorder}`,
+                        color: chartColors.tooltipText,
+                      }}
+                    >
+                      <div style={{ color: chartColors.tooltipTextMuted }} className="mb-2">
                         {label ? new Date(label).toLocaleString() : ""}
                       </div>
                       {payload.map((entry, idx) => (
@@ -296,7 +318,7 @@ export function APLoadReport() {
                             className="w-2 h-2 rounded-full"
                             style={{ backgroundColor: entry.color }}
                           />
-                          <span className="text-gray-300">{entry.name}:</span>
+                          <span style={{ color: chartColors.tooltipTextMuted }}>{entry.name}:</span>
                           <span className="font-medium">{entry.value}%</span>
                         </div>
                       ))}

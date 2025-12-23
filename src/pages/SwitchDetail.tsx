@@ -254,9 +254,8 @@ export function SwitchDetail() {
   const getPortColor = (port: SwitchPort) => {
     if (!port.isUp) return "bg-[var(--bg-tertiary)]";
     if (port.rxErrors > 0 || port.txErrors > 0) return "bg-red-400";
-    if (port.rxBytesR + port.txBytesR > 100000000) return "bg-purple-500/10 dark:bg-purple-500/200";
-    if (port.rxBytesR + port.txBytesR > 10000000)
-      return "bg-emerald-500/10 dark:bg-emerald-500/200";
+    if (port.rxBytesR + port.txBytesR > 100000000) return "bg-purple-500/10 dark:bg-purple-500/20";
+    if (port.rxBytesR + port.txBytesR > 10000000) return "bg-emerald-500/10 dark:bg-emerald-500/20";
     if (port.rxBytesR + port.txBytesR > 1000000) return "bg-emerald-400";
     return "bg-emerald-300";
   };
@@ -353,11 +352,11 @@ export function SwitchDetail() {
             <span>&lt;1 MB/s</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-emerald-500/10 dark:bg-emerald-500/200" />
+            <div className="w-4 h-4 rounded bg-emerald-500/10 dark:bg-emerald-500/20" />
             <span>&gt;10 MB/s</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-purple-500/10 dark:bg-purple-500/200" />
+            <div className="w-4 h-4 rounded bg-purple-500/10 dark:bg-purple-500/20" />
             <span>&gt;100 MB/s</span>
           </div>
           <div className="flex items-center gap-2">

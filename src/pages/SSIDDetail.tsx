@@ -160,13 +160,13 @@ export function SSIDDetail() {
           title="Avg CCQ"
           value={avgCcq ? `${avgCcq.toFixed(0)}%` : "—"}
           icon={Radio}
-          iconBg="bg-pink-50"
+          iconBg="bg-pink-500/10 dark:bg-pink-500/20"
         />
         <StatCard
           title="Total Traffic"
           value={formatBytes(totalRx + totalTx)}
           icon={Activity}
-          iconBg="bg-teal-50"
+          iconBg="bg-teal-500/10 dark:bg-teal-500/20"
         />
       </div>
 

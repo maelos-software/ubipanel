@@ -6,6 +6,7 @@ import { Badge } from "@/components/common/Badge";
 import { queryInflux } from "@/lib/influx";
 import { REFETCH_INTERVAL, THRESHOLDS } from "@/lib/config";
 import { formatUptime } from "@/lib/format";
+import { useChartColors } from "@/hooks/useChartColors";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 interface Device {
@@ -20,6 +21,7 @@ interface Device {
 
 export function InfrastructureReport() {
   const navigate = useNavigate();
+  const chartColors = useChartColors();
 
   // Get all devices
   const { data: devices = [], isLoading } = useQuery({
@@ -192,23 +194,31 @@ export function InfrastructureReport() {
                 tickFormatter={(t) =>
                   new Date(t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                 }
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 domain={[0, 100]}
                 tickFormatter={(v) => `${v}%`}
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
               />
               <Tooltip
+                cursor={{ stroke: chartColors.axisLine, strokeWidth: 1 }}
                 content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null;
                   return (
-                    <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                      <div className="text-gray-400 mb-1">
+                    <div
+                      className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                      style={{
+                        backgroundColor: chartColors.tooltipBg,
+                        border: `1px solid ${chartColors.tooltipBorder}`,
+                        color: chartColors.tooltipText,
+                      }}
+                    >
+                      <div style={{ color: chartColors.tooltipTextMuted }} className="mb-2">
                         {label ? new Date(label).toLocaleString() : ""}
                       </div>
                       <div>CPU: {(payload[0]?.value as number)?.toFixed(1)}%</div>
@@ -224,11 +234,11 @@ export function InfrastructureReport() {
         </div>
         <div className="flex items-center justify-center gap-6 mt-4">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-500/10 dark:bg-purple-500/200" />
+            <div className="w-3 h-3 rounded-full bg-purple-500/10 dark:bg-purple-500/20" />
             <span className="text-sm text-[var(--text-tertiary)]">CPU</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500/10 dark:bg-blue-500/200" />
+            <div className="w-3 h-3 rounded-full bg-blue-500/10 dark:bg-blue-500/20" />
             <span className="text-sm text-[var(--text-tertiary)]">Memory</span>
           </div>
         </div>
@@ -301,10 +311,10 @@ export function InfrastructureReport() {
                             <div
                               className={`h-full rounded-full ${
                                 device.cpu > THRESHOLDS.resource.high
-                                  ? "bg-red-500/10 dark:bg-red-500/200"
+                                  ? "bg-red-500"
                                   : device.cpu > THRESHOLDS.resource.moderate
-                                    ? "bg-amber-500/10 dark:bg-amber-500/200"
-                                    : "bg-green-500/10 dark:bg-green-500/200"
+                                    ? "bg-amber-500"
+                                    : "bg-green-500"
                               }`}
                               style={{ width: `${device.cpu}%` }}
                             />
@@ -320,10 +330,10 @@ export function InfrastructureReport() {
                             <div
                               className={`h-full rounded-full ${
                                 device.mem > THRESHOLDS.resource.high
-                                  ? "bg-red-500/10 dark:bg-red-500/200"
+                                  ? "bg-red-500"
                                   : device.mem > THRESHOLDS.resource.moderate
-                                    ? "bg-amber-500/10 dark:bg-amber-500/200"
-                                    : "bg-green-500/10 dark:bg-green-500/200"
+                                    ? "bg-amber-500"
+                                    : "bg-green-500"
                               }`}
                               style={{ width: `${device.mem}%` }}
                             />

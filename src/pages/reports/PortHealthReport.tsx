@@ -7,10 +7,12 @@ import { Badge } from "@/components/common/Badge";
 import { queryInflux } from "@/lib/influx";
 import { REFETCH_INTERVAL } from "@/lib/config";
 import { formatBytesRate } from "@/lib/format";
+import { useChartColors } from "@/hooks/useChartColors";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 export function PortHealthReport() {
   const navigate = useNavigate();
+  const chartColors = useChartColors();
   const [filter, setFilter] = useState<"all" | "errors" | "drops" | "poe">("all");
 
   // Port health data - use rate fields for current throughput
@@ -177,8 +179,8 @@ export function PortHealthReport() {
           onClick={() => setFilter("all")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "all"
-              ? "bg-purple-100 ring-2 ring-purple-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-purple-100 dark:bg-purple-900/40 ring-2 ring-purple-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="text-sm text-[var(--text-tertiary)]">Active Ports</div>
@@ -188,15 +190,17 @@ export function PortHealthReport() {
           onClick={() => setFilter("errors")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "errors"
-              ? "bg-red-100 ring-2 ring-red-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-red-100 dark:bg-red-900/40 ring-2 ring-red-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="flex items-center gap-2 text-sm text-[var(--text-tertiary)]">
             <AlertTriangle className="w-4 h-4" />
             Errors (24h)
           </div>
-          <div className="text-2xl font-bold text-red-600 mt-1">{portsWithErrors.length}</div>
+          <div className="text-2xl font-bold text-red-600 dark:text-red-400 mt-1">
+            {portsWithErrors.length}
+          </div>
           <div className="text-xs text-[var(--text-tertiary)]">
             {totalNewErrors.toLocaleString()} total
           </div>
@@ -205,15 +209,17 @@ export function PortHealthReport() {
           onClick={() => setFilter("drops")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "drops"
-              ? "bg-orange-100 ring-2 ring-orange-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-orange-100 dark:bg-orange-900/40 ring-2 ring-orange-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="flex items-center gap-2 text-sm text-[var(--text-tertiary)]">
             <AlertTriangle className="w-4 h-4" />
             Drops (24h)
           </div>
-          <div className="text-2xl font-bold text-orange-600 mt-1">{portsWithDrops.length}</div>
+          <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mt-1">
+            {portsWithDrops.length}
+          </div>
           <div className="text-xs text-[var(--text-tertiary)]">
             {totalNewDrops.toLocaleString()} total
           </div>
@@ -222,15 +228,17 @@ export function PortHealthReport() {
           onClick={() => setFilter("poe")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "poe"
-              ? "bg-amber-100 ring-2 ring-amber-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-amber-100 dark:bg-amber-900/40 ring-2 ring-amber-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="flex items-center gap-2 text-sm text-[var(--text-tertiary)]">
             <Zap className="w-4 h-4" />
             PoE Ports
           </div>
-          <div className="text-2xl font-bold text-amber-600 mt-1">{poePorts.length}</div>
+          <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
+            {poePorts.length}
+          </div>
           <div className="text-xs text-[var(--text-tertiary)]">{totalPoe.toFixed(1)}W total</div>
         </button>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm ring-1 ring-[var(--border-primary)] p-4">
@@ -253,17 +261,29 @@ export function PortHealthReport() {
                 <XAxis
                   dataKey="time"
                   tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: "2-digit" })}
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                 />
-                <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
+                  axisLine={false}
+                  tickLine={false}
+                />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                        <div className="text-gray-400">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
                           {label ? new Date(label).toLocaleString() : ""}
                         </div>
                         <div className="font-medium">

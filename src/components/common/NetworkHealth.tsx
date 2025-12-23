@@ -84,9 +84,9 @@ export function NetworkHealth() {
 
   if (offlineDevices.length > 0) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 border border-red-200">
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50">
         <AlertTriangle className="w-4 h-4 text-red-500" />
-        <span className="text-sm text-red-700">
+        <span className="text-sm text-red-700 dark:text-red-400">
           {offlineDevices.length} device{offlineDevices.length > 1 ? "s" : ""} offline
         </span>
       </div>
@@ -94,21 +94,30 @@ export function NetworkHealth() {
   }
 
   return (
-    <div className="flex items-center gap-4 text-sm text-gray-500">
+    <div className="flex items-center gap-4 text-sm text-[var(--text-tertiary)]">
       <div className="flex items-center gap-1.5">
         <CheckCircle className="w-4 h-4 text-green-500" />
         <span>{totalDevices} devices</span>
       </div>
       <div className="flex items-center gap-3 text-xs">
-        <Link to="/access-points" className="flex items-center gap-1 hover:text-purple-600">
+        <Link
+          to="/access-points"
+          className="flex items-center gap-1 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+        >
           <Wifi className="w-3.5 h-3.5" />
           <span>{apCount}</span>
         </Link>
-        <Link to="/switches" className="flex items-center gap-1 hover:text-purple-600">
+        <Link
+          to="/switches"
+          className="flex items-center gap-1 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+        >
           <Network className="w-3.5 h-3.5" />
           <span>{swCount}</span>
         </Link>
-        <Link to="/gateway" className="flex items-center gap-1 hover:text-purple-600">
+        <Link
+          to="/gateway"
+          className="flex items-center gap-1 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+        >
           <Router className="w-3.5 h-3.5" />
           <span>{gwCount}</span>
         </Link>

@@ -9,6 +9,8 @@ import {
   useBandwidthByVlan,
   useClientBandwidthTrend,
 } from "@/hooks/useBandwidth";
+import { CHART_COLORS } from "@/config/theme";
+import { useChartColors } from "@/hooks/useChartColors";
 import {
   AreaChart,
   Area,
@@ -20,12 +22,12 @@ import {
   Bar,
   Cell,
 } from "recharts";
-import { CHART_COLORS } from "@/config/theme";
 
 const COLORS = CHART_COLORS.accent;
 
 export function BandwidthReport() {
   const navigate = useNavigate();
+  const chartColors = useChartColors();
   const [timeRange, setTimeRange] = useState(TIME_RANGES_REPORT_FULL[0]);
 
   // Use centralized hooks for correct bandwidth calculations
@@ -55,7 +57,7 @@ export function BandwidthReport() {
             onClick={() => setTimeRange(range)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               timeRange.value === range.value
-                ? "bg-purple-100 text-purple-700"
+                ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
                 : "bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)]"
             }`}
           >
@@ -117,32 +119,44 @@ export function BandwidthReport() {
                   const d = new Date(t);
                   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
                 }}
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 tickFormatter={(v) => formatBytesRate(v)}
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
                 width={80}
               />
               <Tooltip
+                cursor={{ stroke: chartColors.axisLine, strokeWidth: 1 }}
                 content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null;
                   return (
-                    <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                      <div className="text-gray-400 mb-1">
+                    <div
+                      className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                      style={{
+                        backgroundColor: chartColors.tooltipBg,
+                        border: `1px solid ${chartColors.tooltipBorder}`,
+                        color: chartColors.tooltipText,
+                      }}
+                    >
+                      <div style={{ color: chartColors.tooltipTextMuted }} className="mb-1">
                         {label ? new Date(label).toLocaleString() : ""}
                       </div>
                       <div className="flex items-center gap-2">
                         <ArrowDownRight className="w-3 h-3 text-purple-400" />
-                        <span>Download: {formatBytesRate(payload[0]?.value as number)}</span>
+                        <span style={{ color: chartColors.tooltipTextMuted }}>
+                          Download: {formatBytesRate(payload[0]?.value as number)}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <ArrowUpRight className="w-3 h-3 text-blue-400" />
-                        <span>Upload: {formatBytesRate(payload[1]?.value as number)}</span>
+                        <span style={{ color: chartColors.tooltipTextMuted }}>
+                          Upload: {formatBytesRate(payload[1]?.value as number)}
+                        </span>
                       </div>
                     </div>
                   );
@@ -167,11 +181,11 @@ export function BandwidthReport() {
         </div>
         <div className="flex items-center justify-center gap-6 mt-4">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-500/10 dark:bg-purple-500/200" />
+            <div className="w-3 h-3 rounded-full bg-purple-500/10 dark:bg-purple-500/20" />
             <span className="text-sm text-[var(--text-tertiary)]">Download</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500/10 dark:bg-blue-500/200" />
+            <div className="w-3 h-3 rounded-full bg-blue-500/10 dark:bg-blue-500/20" />
             <span className="text-sm text-[var(--text-tertiary)]">Upload</span>
           </div>
         </div>
@@ -193,7 +207,7 @@ export function BandwidthReport() {
                   onClick={() => navigate(`/clients/${encodeURIComponent(client.id)}`)}
                   className="w-full flex items-center gap-4 p-3 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors group"
                 >
-                  <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-sm font-bold text-purple-600">
+                  <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-sm font-bold text-purple-600 dark:text-purple-400">
                     {idx + 1}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -248,20 +262,30 @@ export function BandwidthReport() {
                 <YAxis
                   type="category"
                   dataKey="name"
-                  tick={{ fontSize: 12, fill: "#6b7280" }}
+                  tick={{ fontSize: 12, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   width={60}
                   tickFormatter={(v) => `VLAN ${v}`}
                 />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
                         <div className="font-medium">VLAN {data.name}</div>
-                        <div className="text-gray-400 mt-1">Total: {formatBytes(data.total)}</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mt-1">
+                          Total: {formatBytes(data.total)}
+                        </div>
                       </div>
                     );
                   }}

@@ -7,6 +7,7 @@ import { queryInflux } from "@/lib/influx";
 import { REFETCH_INTERVAL } from "@/lib/config";
 import { formatBytes, formatBytesRate } from "@/lib/format";
 import { useWANBandwidthTrend } from "@/hooks/useBandwidth";
+import { useChartColors } from "@/hooks/useChartColors";
 import { formatDistanceToNow } from "date-fns";
 import {
   AreaChart,
@@ -27,6 +28,7 @@ interface WANEvent {
 
 export function WANHealthReport() {
   const [timeRange, setTimeRange] = useState("7d");
+  const chartColors = useChartColors();
 
   // WAN ports status
   const { data: wanPorts = [] } = useQuery({
@@ -145,7 +147,7 @@ export function WANHealthReport() {
             onClick={() => setTimeRange(range)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               timeRange === range
-                ? "bg-amber-100 text-amber-700"
+                ? "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300"
                 : "bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)]"
             }`}
           >
@@ -218,23 +220,31 @@ export function WANHealthReport() {
                     ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                     : d.toLocaleDateString([], { month: "short", day: "numeric" });
                 }}
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 tickFormatter={(v) => formatBytesRate(v)}
-                tick={{ fontSize: 12, fill: "#9ca3af" }}
+                tick={{ fontSize: 12, fill: chartColors.tickText }}
                 axisLine={false}
                 tickLine={false}
                 width={80}
               />
               <Tooltip
+                cursor={{ stroke: chartColors.axisLine, strokeWidth: 1 }}
                 content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null;
                   return (
-                    <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                      <div className="text-gray-400 mb-1">
+                    <div
+                      className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                      style={{
+                        backgroundColor: chartColors.tooltipBg,
+                        border: `1px solid ${chartColors.tooltipBorder}`,
+                        color: chartColors.tooltipText,
+                      }}
+                    >
+                      <div style={{ color: chartColors.tooltipTextMuted }} className="mb-2">
                         {label ? new Date(label).toLocaleString() : ""}
                       </div>
                       <div>Download: {formatBytesRate(payload[0]?.value as number)}</div>
@@ -365,11 +375,11 @@ export function WANHealthReport() {
         {/* Chart Legend */}
         <div className="flex items-center justify-center gap-6 mt-4 flex-wrap">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-0.5 bg-amber-500/10 dark:bg-amber-500/200" />
+            <div className="w-4 h-0.5 bg-amber-500/10 dark:bg-amber-500/20" />
             <span className="text-xs text-[var(--text-tertiary)]">Download</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-0.5 bg-blue-500/10 dark:bg-blue-500/200" />
+            <div className="w-4 h-0.5 bg-blue-500/10 dark:bg-blue-500/20" />
             <span className="text-xs text-[var(--text-tertiary)]">Upload</span>
           </div>
           {events.length > 0 && (

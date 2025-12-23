@@ -118,22 +118,28 @@ export function AccessPoints() {
           title="Access Points"
           value={aps.length}
           icon={Wifi}
-          iconBg="bg-purple-50"
+          iconBg="bg-purple-500/10 dark:bg-purple-500/20"
           compact
         />
-        <StatCard title="Radios" value={radios.length} icon={Radio} iconBg="bg-blue-50" compact />
+        <StatCard
+          title="Radios"
+          value={radios.length}
+          icon={Radio}
+          iconBg="bg-blue-500/10 dark:bg-blue-500/20"
+          compact
+        />
         <StatCard
           title="SSIDs"
           value={uniqueSSIDs.size}
           icon={Signal}
-          iconBg="bg-emerald-50"
+          iconBg="bg-emerald-500/10 dark:bg-emerald-500/20"
           compact
         />
         <StatCard
           title="Clients"
           value={wirelessClients.length}
           icon={Activity}
-          iconBg="bg-amber-50"
+          iconBg="bg-amber-500/10 dark:bg-amber-500/20"
           compact
         />
         <StatCard
@@ -145,7 +151,7 @@ export function AccessPoints() {
           }
           value={avgChannelUtil > 0 ? formatPercent(avgChannelUtil) : "—"}
           icon={Activity}
-          iconBg="bg-red-50"
+          iconBg="bg-red-500/10 dark:bg-red-500/20"
           compact
         />
         <StatCard
@@ -157,7 +163,7 @@ export function AccessPoints() {
           }
           value={avgSignal ? `${avgSignal.toFixed(0)} dBm` : "—"}
           icon={Signal}
-          iconBg="bg-indigo-50"
+          iconBg="bg-indigo-500/10 dark:bg-indigo-500/20"
           compact
         />
       </section>
@@ -189,9 +195,9 @@ export function AccessPoints() {
                 sortValue: (ap) => ap.name.toLowerCase(),
                 render: (ap) => (
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 dark:bg-emerald-900/30 flex items-center justify-center">
                       <Wifi
-                        className="w-5 h-5 text-green-600 dark:text-green-400"
+                        className="w-5 h-5 text-emerald-600 dark:text-emerald-400"
                         aria-hidden="true"
                       />
                     </div>
@@ -536,7 +542,7 @@ export function AccessPoints() {
                         {s.channels["2.4GHz"].map((ch) => (
                           <span
                             key={ch}
-                            className="inline-block px-1.5 py-0.5 bg-amber-50 text-amber-700 rounded text-xs"
+                            className="inline-block px-1.5 py-0.5 bg-amber-500/10 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded text-xs"
                           >
                             {ch}
                           </span>
@@ -549,7 +555,7 @@ export function AccessPoints() {
                         {s.channels["5GHz"].map((ch) => (
                           <span
                             key={ch}
-                            className="inline-block px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded text-xs"
+                            className="inline-block px-1.5 py-0.5 bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 rounded text-xs"
                           >
                             {ch}
                           </span>
@@ -562,7 +568,7 @@ export function AccessPoints() {
                         {s.channels["6GHz"].map((ch) => (
                           <span
                             key={ch}
-                            className="inline-block px-1.5 py-0.5 bg-cyan-50 text-cyan-700 rounded text-xs"
+                            className="inline-block px-1.5 py-0.5 bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-400 rounded text-xs"
                           >
                             {ch}
                           </span>

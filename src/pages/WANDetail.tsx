@@ -320,7 +320,7 @@ export function WANDetail() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-tertiary)]">
             <div
-              className={`w-3 h-3 rounded-full ${port.up ? "bg-emerald-500/10 dark:bg-emerald-500/200" : "bg-[var(--bg-tertiary)]"}`}
+              className={`w-3 h-3 rounded-full ${port.up ? "bg-emerald-500/10 dark:bg-emerald-500/20" : "bg-[var(--bg-tertiary)]"}`}
             />
             <div>
               <div className="text-sm font-medium">Link Status</div>
@@ -329,7 +329,7 @@ export function WANDetail() {
           </div>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-tertiary)]">
             <div
-              className={`w-3 h-3 rounded-full ${port.enabled ? "bg-emerald-500/10 dark:bg-emerald-500/200" : "bg-[var(--bg-tertiary)]"}`}
+              className={`w-3 h-3 rounded-full ${port.enabled ? "bg-emerald-500/10 dark:bg-emerald-500/20" : "bg-[var(--bg-tertiary)]"}`}
             />
             <div>
               <div className="text-sm font-medium">Admin Status</div>
@@ -340,7 +340,7 @@ export function WANDetail() {
           </div>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-tertiary)]">
             <div
-              className={`w-3 h-3 rounded-full ${port.isUplink ? "bg-emerald-500/10 dark:bg-emerald-500/200" : "bg-[var(--bg-tertiary)]"}`}
+              className={`w-3 h-3 rounded-full ${port.isUplink ? "bg-emerald-500/10 dark:bg-emerald-500/20" : "bg-[var(--bg-tertiary)]"}`}
             />
             <div>
               <div className="text-sm font-medium">Uplink Role</div>
@@ -351,7 +351,7 @@ export function WANDetail() {
           </div>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-tertiary)]">
             <div
-              className={`w-3 h-3 rounded-full ${port.fullDuplex ? "bg-emerald-500/10 dark:bg-emerald-500/200" : "bg-amber-500/10 dark:bg-amber-500/200"}`}
+              className={`w-3 h-3 rounded-full ${port.fullDuplex ? "bg-emerald-500/10 dark:bg-emerald-500/20" : "bg-amber-500/10 dark:bg-amber-500/20"}`}
             />
             <div>
               <div className="text-sm font-medium">Duplex Mode</div>

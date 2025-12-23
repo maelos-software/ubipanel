@@ -55,24 +55,34 @@ interface StatCardProps {
 const iconColorMap: Record<string, string> = {
   "bg-purple-50": "text-purple-600",
   "bg-purple-100": "text-purple-600",
+  "bg-purple-500/10": "text-purple-600 dark:text-purple-400",
   "bg-blue-50": "text-blue-600",
   "bg-blue-100": "text-blue-600",
+  "bg-blue-500/10": "text-blue-600 dark:text-blue-400",
   "bg-emerald-50": "text-emerald-600",
   "bg-emerald-100": "text-emerald-600",
+  "bg-emerald-500/10": "text-emerald-600 dark:text-emerald-400",
   "bg-amber-50": "text-amber-600",
   "bg-amber-100": "text-amber-600",
+  "bg-amber-500/10": "text-amber-600 dark:text-amber-400",
   "bg-red-50": "text-red-600",
   "bg-red-100": "text-red-600",
+  "bg-red-500/10": "text-red-600 dark:text-red-400",
   "bg-indigo-50": "text-indigo-600",
   "bg-indigo-100": "text-indigo-600",
+  "bg-indigo-500/10": "text-indigo-600 dark:text-indigo-400",
   "bg-slate-50": "text-slate-600",
   "bg-slate-100": "text-slate-600",
+  "bg-slate-500/10": "text-slate-600 dark:text-slate-400",
   "bg-green-50": "text-green-600",
   "bg-green-100": "text-green-600",
+  "bg-green-500/10": "text-green-600 dark:text-green-400",
   "bg-yellow-50": "text-yellow-600",
   "bg-yellow-100": "text-yellow-600",
+  "bg-yellow-500/10": "text-yellow-600 dark:text-yellow-400",
   "bg-cyan-50": "text-cyan-600",
   "bg-cyan-100": "text-cyan-600",
+  "bg-cyan-500/10": "text-cyan-600 dark:text-cyan-400",
 };
 
 // Dark mode icon background mappings
@@ -112,7 +122,7 @@ export function StatCard({
 }: StatCardProps) {
   const Wrapper = onClick ? "button" : "div";
   const resolvedIconColor = iconColor || iconColorMap[iconBg] || "text-purple-600";
-  const darkIconBg = darkIconBgMap[iconBg] || "dark:bg-slate-700/50";
+  const darkIconBg = darkIconBgMap[iconBg] || ""; // Remove fallback to slate-700 to allow native dark: classes in iconBg
 
   if (compact) {
     return (

@@ -137,7 +137,7 @@ export function ApplicationDetail() {
           onClick={() => setTimeRange(range)}
           className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
             timeRange === range
-              ? "bg-purple-500/10 dark:bg-purple-500/200 text-white shadow-sm"
+              ? "bg-purple-500/10 dark:bg-purple-500/20 text-white shadow-sm"
               : "bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)]"
           }`}
         >
@@ -171,8 +171,8 @@ export function ApplicationDetail() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-100">
-              <Server className="w-5 h-5 text-purple-600" />
+            <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-900/30">
+              <Server className="w-5 h-5 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -184,8 +184,8 @@ export function ApplicationDetail() {
         </div>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-100">
-              <ArrowDown className="w-5 h-5 text-green-600" />
+            <div className="p-2 rounded-lg bg-green-500/10 dark:bg-green-900/30">
+              <ArrowDown className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -197,8 +197,8 @@ export function ApplicationDetail() {
         </div>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-100">
-              <ArrowUp className="w-5 h-5 text-blue-600" />
+            <div className="p-2 rounded-lg bg-blue-500/10 dark:bg-blue-900/30">
+              <ArrowUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -210,8 +210,8 @@ export function ApplicationDetail() {
         </div>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-100">
-              <Laptop className="w-5 h-5 text-amber-600" />
+            <div className="p-2 rounded-lg bg-amber-500/10 dark:bg-amber-900/30">
+              <Laptop className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -223,8 +223,8 @@ export function ApplicationDetail() {
         </div>
         <div className="bg-[var(--bg-secondary)] rounded-xl shadow-sm border border-[var(--border-primary)] p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-cyan-100">
-              <Clock className="w-5 h-5 text-cyan-600" />
+            <div className="p-2 rounded-lg bg-cyan-500/10 dark:bg-cyan-900/30">
+              <Clock className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-[var(--text-primary)]">
@@ -263,18 +263,25 @@ export function ApplicationDetail() {
                       <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="time" tick={{ fill: "#6b7280", fontSize: 11 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis
+                    dataKey="time"
+                    tick={{ fill: chartColors.tickText, fontSize: 11 }}
+                    stroke={chartColors.axisLine}
+                  />
                   <YAxis
                     tickFormatter={(v) => formatBytes(v)}
-                    tick={{ fill: "#6b7280", fontSize: 11 }}
+                    tick={{ fill: chartColors.tickText, fontSize: 11 }}
+                    stroke={chartColors.axisLine}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#fff",
-                      border: "1px solid #e5e7eb",
+                      backgroundColor: chartColors.tooltipBg,
+                      border: `1px solid ${chartColors.tooltipBorder}`,
                       borderRadius: "8px",
                     }}
+                    itemStyle={{ color: chartColors.tooltipText }}
+                    labelStyle={{ color: chartColors.tooltipText }}
                     formatter={(value: number, name: string) => [
                       formatBytes(value),
                       name === "download" ? "Download" : "Upload",

@@ -7,6 +7,7 @@ import { Badge } from "@/components/common/Badge";
 import { queryInflux } from "@/lib/influx";
 import { REFETCH_INTERVAL } from "@/lib/config";
 import { getSignalQuality } from "@/lib/format";
+import { useChartColors } from "@/hooks/useChartColors";
 import {
   ScatterChart,
   Scatter,
@@ -19,18 +20,9 @@ import {
   Bar,
 } from "recharts";
 
-interface ClientExperience {
-  mac: string;
-  name: string;
-  satisfaction: number;
-  rssi: number;
-  txRetries: number;
-  apName: string;
-  channel: number;
-}
-
 export function ExperienceReport() {
   const navigate = useNavigate();
+  const chartColors = useChartColors();
   const [filter, setFilter] = useState<"all" | "poor" | "weak" | "retries">("all");
 
   // Client experience data
@@ -148,8 +140,8 @@ export function ExperienceReport() {
           onClick={() => setFilter("all")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "all"
-              ? "bg-purple-100 ring-2 ring-purple-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-purple-100 dark:bg-purple-900/40 ring-2 ring-purple-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="flex items-center gap-2 text-sm text-[var(--text-tertiary)]">
@@ -162,43 +154,49 @@ export function ExperienceReport() {
           onClick={() => setFilter("poor")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "poor"
-              ? "bg-amber-100 ring-2 ring-amber-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-amber-100 dark:bg-amber-900/40 ring-2 ring-amber-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="flex items-center gap-2 text-sm text-[var(--text-tertiary)]">
             <AlertTriangle className="w-4 h-4" />
             Poor Satisfaction
           </div>
-          <div className="text-2xl font-bold text-amber-600 mt-1">{poorSatisfaction.length}</div>
+          <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
+            {poorSatisfaction.length}
+          </div>
         </button>
         <button
           onClick={() => setFilter("weak")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "weak"
-              ? "bg-red-100 ring-2 ring-red-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-red-100 dark:bg-red-900/40 ring-2 ring-red-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="flex items-center gap-2 text-sm text-[var(--text-tertiary)]">
             <Signal className="w-4 h-4" />
             Weak Signal
           </div>
-          <div className="text-2xl font-bold text-red-600 mt-1">{weakSignal.length}</div>
+          <div className="text-2xl font-bold text-red-600 dark:text-red-400 mt-1">
+            {weakSignal.length}
+          </div>
         </button>
         <button
           onClick={() => setFilter("retries")}
           className={`text-left p-4 rounded-xl transition-all ${
             filter === "retries"
-              ? "bg-orange-100 ring-2 ring-orange-500"
-              : "bg-white ring-1 ring-[var(--border-primary)] hover:ring-gray-200"
+              ? "bg-orange-100 dark:bg-orange-900/40 ring-2 ring-orange-500"
+              : "bg-[var(--bg-secondary)] ring-1 ring-[var(--border-primary)] hover:ring-gray-200 dark:hover:ring-slate-700"
           }`}
         >
           <div className="flex items-center gap-2 text-sm text-[var(--text-tertiary)]">
             <RefreshCw className="w-4 h-4" />
             High Retries
           </div>
-          <div className="text-2xl font-bold text-orange-600 mt-1">{highRetries.length}</div>
+          <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mt-1">
+            {highRetries.length}
+          </div>
         </button>
       </div>
 
@@ -215,21 +213,21 @@ export function ExperienceReport() {
                   type="number"
                   dataKey="rssi"
                   domain={["auto", "auto"]}
-                  tick={{ fontSize: 12, fill: "#9ca3af" }}
+                  tick={{ fontSize: 12, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   label={{
                     value: "Signal (dBm)",
                     position: "bottom",
                     fontSize: 12,
-                    fill: "#6b7280",
+                    fill: chartColors.tickText,
                   }}
                 />
                 <YAxis
                   type="number"
                   dataKey="satisfaction"
                   domain={[0, 100]}
-                  tick={{ fontSize: 12, fill: "#9ca3af" }}
+                  tick={{ fontSize: 12, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   label={{
@@ -237,19 +235,36 @@ export function ExperienceReport() {
                     angle: -90,
                     position: "left",
                     fontSize: 12,
-                    fill: "#6b7280",
+                    fill: chartColors.tickText,
                   }}
                 />
                 <Tooltip
+                  cursor={{ strokeDasharray: "3 3" }}
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
-                    const data = payload[0].payload as ClientExperience;
+                    const data = payload[0].payload as {
+                      name: string;
+                      rssi: number;
+                      satisfaction: number;
+                      apName: string;
+                    };
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
                         <div className="font-medium">{data.name}</div>
-                        <div className="text-gray-400 mt-1">Signal: {data.rssi} dBm</div>
-                        <div className="text-gray-400">Satisfaction: {data.satisfaction}%</div>
-                        <div className="text-gray-400">AP: {data.apName}</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mt-1">
+                          Signal: {data.rssi} dBm
+                        </div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
+                          Satisfaction: {data.satisfaction}%
+                        </div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>AP: {data.apName}</div>
                       </div>
                     );
                   }}
@@ -288,7 +303,7 @@ export function ExperienceReport() {
                 <YAxis
                   type="category"
                   dataKey="range"
-                  tick={{ fontSize: 11, fill: "#6b7280" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   width={120}
@@ -311,7 +326,7 @@ export function ExperienceReport() {
                 <YAxis
                   type="category"
                   dataKey="range"
-                  tick={{ fontSize: 11, fill: "#6b7280" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   width={120}

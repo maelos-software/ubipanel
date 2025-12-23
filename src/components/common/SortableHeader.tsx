@@ -57,7 +57,7 @@ export function SortableHeader({
   return (
     <th
       onClick={() => onSort(sortKey)}
-      className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500 cursor-pointer hover:bg-gray-100/50 select-none transition-colors ${className}`}
+      className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-tertiary)] border-b border-[var(--border-primary)] cursor-pointer hover:bg-[var(--bg-tertiary)] select-none transition-colors ${className}`}
     >
       <div className={`flex items-center gap-1 ${alignClass}`}>
         <span>{label}</span>

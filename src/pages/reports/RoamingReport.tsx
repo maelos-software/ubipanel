@@ -4,6 +4,7 @@ import { ArrowRightLeft, TrendingUp } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { queryInflux } from "@/lib/influx";
 import { REFETCH_INTERVAL } from "@/lib/config";
+import { useChartColors } from "@/hooks/useChartColors";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 interface RoamingClient {
@@ -15,6 +16,7 @@ interface RoamingClient {
 
 export function RoamingReport() {
   const navigate = useNavigate();
+  const chartColors = useChartColors();
 
   // All wireless clients with roam data
   const { data: allClients = [], isLoading } = useQuery({
@@ -125,19 +127,29 @@ export function RoamingReport() {
                 <YAxis
                   type="category"
                   dataKey="apName"
-                  tick={{ fontSize: 11, fill: "#6b7280" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   width={100}
                 />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
                         <div className="font-medium">{data.apName}</div>
-                        <div className="text-gray-400 mt-1">{data.roams} roams</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mt-1">
+                          {data.roams} roams
+                        </div>
                       </div>
                     );
                   }}
@@ -165,7 +177,7 @@ export function RoamingReport() {
               <BarChart data={clients.slice(0, 20)}>
                 <XAxis
                   dataKey="name"
-                  tick={{ fontSize: 10, fill: "#6b7280" }}
+                  tick={{ fontSize: 10, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   interval={0}
@@ -173,16 +185,32 @@ export function RoamingReport() {
                   textAnchor="end"
                   height={60}
                 />
-                <YAxis tick={{ fontSize: 12, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tick={{ fontSize: 12, fill: chartColors.tickText }}
+                  axisLine={false}
+                  tickLine={false}
+                />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const data = payload[0].payload as RoamingClient;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
                         <div className="font-medium">{data.name}</div>
-                        <div className="text-gray-400 mt-1">{data.roamCount} roams</div>
-                        <div className="text-gray-400">Current AP: {data.apName}</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mt-1">
+                          {data.roamCount} roams
+                        </div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
+                          Current AP: {data.apName}
+                        </div>
                       </div>
                     );
                   }}
@@ -206,15 +234,15 @@ export function RoamingReport() {
           </div>
           <div className="flex items-center justify-center gap-6 mt-4">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-amber-500/10 dark:bg-amber-500/200" />
+              <div className="w-3 h-3 rounded-full bg-amber-500/10 dark:bg-amber-500/20" />
               <span className="text-xs text-[var(--text-tertiary)]">High (&gt;10)</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-purple-500/10 dark:bg-purple-500/200" />
+              <div className="w-3 h-3 rounded-full bg-purple-500/10 dark:bg-purple-500/20" />
               <span className="text-xs text-[var(--text-tertiary)]">Moderate (5-10)</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-blue-500/10 dark:bg-blue-500/200" />
+              <div className="w-3 h-3 rounded-full bg-blue-500/10 dark:bg-blue-500/20" />
               <span className="text-xs text-[var(--text-tertiary)]">Normal (&lt;5)</span>
             </div>
           </div>
@@ -264,7 +292,7 @@ export function RoamingReport() {
                       </div>
                     </td>
                     <td className="py-3 pr-4">
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-sm font-medium">
                         <ArrowRightLeft className="w-3 h-3" />
                         {client.roamCount}
                       </span>

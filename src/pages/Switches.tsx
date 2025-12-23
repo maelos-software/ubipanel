@@ -168,28 +168,28 @@ export function Switches() {
           title="Switches"
           value={switches.length}
           icon={Network}
-          iconBg="bg-purple-50"
+          iconBg="bg-purple-500/10 dark:bg-purple-500/20"
           compact
         />
         <StatCard
           title="Active Ports"
           value={activePorts}
           icon={Activity}
-          iconBg="bg-emerald-50"
+          iconBg="bg-emerald-500/10 dark:bg-emerald-500/20"
           compact
         />
         <StatCard
           title="PoE Power"
           value={`${totalPoePower.toFixed(1)}W`}
           icon={Zap}
-          iconBg="bg-yellow-50"
+          iconBg="bg-yellow-500/10 dark:bg-yellow-500/20"
           compact
         />
         <StatCard
           title="Throughput"
           value={formatBytesRate(totalBandwidth)}
           icon={Activity}
-          iconBg="bg-blue-50"
+          iconBg="bg-blue-500/10 dark:bg-blue-500/20"
           compact
         />
         {portsWithErrors > 0 ? (
@@ -197,11 +197,17 @@ export function Switches() {
             title="Port Issues"
             value={portsWithErrors}
             icon={AlertTriangle}
-            iconBg="bg-red-50"
+            iconBg="bg-red-500/10 dark:bg-red-500/20"
             compact
           />
         ) : (
-          <StatCard title="Health" value="Good" icon={Activity} iconBg="bg-green-50" compact />
+          <StatCard
+            title="Health"
+            value="Good"
+            icon={Activity}
+            iconBg="bg-green-500/10 dark:bg-green-500/20"
+            compact
+          />
         )}
       </section>
 

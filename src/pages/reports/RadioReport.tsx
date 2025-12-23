@@ -19,6 +19,7 @@ import {
   Area,
 } from "recharts";
 import { CHART_COLORS } from "@/config/theme";
+import { useChartColors } from "@/hooks/useChartColors";
 import {
   useRadioStats,
   useVapStats,
@@ -34,6 +35,7 @@ const COLORS = CHART_COLORS.radio;
 export function RadioReport() {
   const [timeRange, setTimeRange] = useState(TIME_RANGES_REPORT[1]); // Default to 3h
   const rangeConfig = timeRange;
+  const chartColors = useChartColors();
 
   // Current radio stats
   const { data: radios = [], isLoading: radiosLoading } = useRadioStats();
@@ -238,13 +240,13 @@ export function RadioReport() {
                   tickFormatter={(t) =>
                     new Date(t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                   }
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
                   tickFormatter={(v) => formatBytes(v) + "/s"}
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   width={70}
@@ -253,8 +255,15 @@ export function RadioReport() {
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                        <div className="text-gray-400 mb-1">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mb-1">
                           {label ? new Date(label).toLocaleString() : ""}
                         </div>
                         {payload.map((p) => (
@@ -313,17 +322,28 @@ export function RadioReport() {
                   tickFormatter={(t) =>
                     new Date(t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                   }
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                 />
-                <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
+                  axisLine={false}
+                  tickLine={false}
+                />
                 <Tooltip
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                        <div className="text-gray-400 mb-1">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mb-1">
                           {label ? new Date(label).toLocaleString() : ""}
                         </div>
                         {payload.map((p) => (
@@ -386,29 +406,43 @@ export function RadioReport() {
                   type="number"
                   domain={[0, 100]}
                   tickFormatter={(v) => `${v}%`}
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                 />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  tick={{ fontSize: 11, fill: "#6b7280" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   width={120}
                 />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const data = payload[0].payload as RadioData;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
                         <div className="font-medium">{data.name}</div>
-                        <div className="text-gray-400 mt-1">Channel {data.channel}</div>
-                        <div className="text-gray-400">Total: {data.cuTotal}%</div>
-                        <div className="text-gray-400">
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mt-1">
+                          Channel {data.channel}
+                        </div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
+                          Total: {data.cuTotal}%
+                        </div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
                           Self Rx: {data.cuSelfRx}% | Tx: {data.cuSelfTx}%
                         </div>
-                        <div className="text-gray-400">{data.numSta} clients</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
+                          {data.numSta} clients
+                        </div>
                       </div>
                     );
                   }}
@@ -444,29 +478,43 @@ export function RadioReport() {
                   type="number"
                   domain={[0, 100]}
                   tickFormatter={(v) => `${v}%`}
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                 />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  tick={{ fontSize: 11, fill: "#6b7280" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                   width={120}
                 />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const data = payload[0].payload as RadioData;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
                         <div className="font-medium">{data.name}</div>
-                        <div className="text-gray-400 mt-1">Channel {data.channel}</div>
-                        <div className="text-gray-400">Total: {data.cuTotal}%</div>
-                        <div className="text-gray-400">
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mt-1">
+                          Channel {data.channel}
+                        </div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
+                          Total: {data.cuTotal}%
+                        </div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
                           Self Rx: {data.cuSelfRx}% | Tx: {data.cuSelfTx}%
                         </div>
-                        <div className="text-gray-400">{data.numSta} clients</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>
+                          {data.numSta} clients
+                        </div>
                       </div>
                     );
                   }}
@@ -506,14 +554,14 @@ export function RadioReport() {
                   tickFormatter={(t) =>
                     new Date(t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                   }
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
                   domain={[0, 100]}
                   tickFormatter={(v) => `${v}%`}
-                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                 />
@@ -521,8 +569,15 @@ export function RadioReport() {
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
-                        <div className="text-gray-400 mb-1">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mb-1">
                           {label ? new Date(label).toLocaleString() : ""}
                         </div>
                         {payload.map((p) => (
@@ -577,20 +632,34 @@ export function RadioReport() {
               <BarChart data={channelData.slice(0, 10)}>
                 <XAxis
                   dataKey="channel"
-                  tick={{ fontSize: 11, fill: "#6b7280" }}
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
                   axisLine={false}
                   tickLine={false}
                 />
-                <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tick={{ fontSize: 11, fill: chartColors.tickText }}
+                  axisLine={false}
+                  tickLine={false}
+                />
                 <Tooltip
+                  cursor={{ fill: chartColors.grid, opacity: 0.2 }}
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg">
+                      <div
+                        className="rounded-lg shadow-lg px-3 py-2 text-sm"
+                        style={{
+                          backgroundColor: chartColors.tooltipBg,
+                          border: `1px solid ${chartColors.tooltipBorder}`,
+                          color: chartColors.tooltipText,
+                        }}
+                      >
                         <div className="font-medium">{data.channel}</div>
-                        <div className="text-gray-400">{data.band}</div>
-                        <div className="text-gray-400 mt-1">{data.clients} clients</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }}>{data.band}</div>
+                        <div style={{ color: chartColors.tooltipTextMuted }} className="mt-1">
+                          {data.clients} clients
+                        </div>
                       </div>
                     );
                   }}
@@ -685,10 +754,10 @@ export function RadioReport() {
                           <div
                             className={`h-full rounded-full ${
                               radio.cuTotal > THRESHOLDS.utilization.high
-                                ? "bg-red-500/10 dark:bg-red-500/200"
+                                ? "bg-red-500/10 dark:bg-red-500/20"
                                 : radio.cuTotal > THRESHOLDS.utilization.moderate
-                                  ? "bg-amber-500/10 dark:bg-amber-500/200"
-                                  : "bg-green-500/10 dark:bg-green-500/200"
+                                  ? "bg-amber-500/10 dark:bg-amber-500/20"
+                                  : "bg-green-500/10 dark:bg-green-500/20"
                             }`}
                             style={{ width: `${Math.min(radio.cuTotal, 100)}%` }}
                           />

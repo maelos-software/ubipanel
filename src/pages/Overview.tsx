@@ -137,7 +137,7 @@ export function Overview() {
           value={clients.length}
           subtitle={`${wirelessClients.length} wireless · ${wiredClients.length} wired`}
           icon={Laptop}
-          iconBg="bg-blue-50"
+          iconBg="bg-blue-500/10 dark:bg-blue-500/20"
           onClick={() => navigate("/clients")}
           compact
         />
@@ -145,7 +145,7 @@ export function Overview() {
           title="Access Points"
           value={aps.length}
           icon={Wifi}
-          iconBg="bg-green-50"
+          iconBg="bg-green-500/10 dark:bg-green-500/20"
           onClick={() => navigate("/access-points")}
           compact
         />
@@ -153,7 +153,7 @@ export function Overview() {
           title="Switches"
           value={switches.length}
           icon={Network}
-          iconBg="bg-purple-50"
+          iconBg="bg-purple-500/10 dark:bg-purple-500/20"
           onClick={() => navigate("/switches")}
           compact
         />
@@ -161,7 +161,7 @@ export function Overview() {
           title="WAN Links"
           value={`${wanPorts.filter((p) => p.up).length}/${wanPorts.length}`}
           icon={Globe}
-          iconBg="bg-amber-50"
+          iconBg="bg-amber-500/10 dark:bg-amber-500/20"
           onClick={() => navigate("/gateway")}
           compact
         />

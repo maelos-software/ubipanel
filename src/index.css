@@ -90,7 +90,7 @@
 .dark {
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
+  --bg-tertiary: #243146;
 
   /* Semantic Brand Mapping - Dark */
   --accent-primary: var(--color-purple-500);
@@ -101,7 +101,7 @@
   --text-secondary: #cbd5e1;
   --text-tertiary: #94a3b8;
   --text-muted: #64748b;
-  --border-primary: #334155;
+  --border-primary: #2d3a4f;
   --border-secondary: #1e293b;
 
   /* Chart colors - dark mode */
